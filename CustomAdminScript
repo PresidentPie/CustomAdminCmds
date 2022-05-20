@@ -1,0 +1,519 @@
+local UIS = game:GetService("UserInputService")
+
+local commands = {}
+
+
+
+
+local admins = {
+	"Add Names of Admins here";
+  "seperate like this";
+}
+
+local prefix = ";;" --Change the prefix to whatever you want
+
+local function findPlayer(name)
+	
+	for _, player in pairs(game.Players:GetPlayers()) do
+		if string.lower(player.Name) == name then
+			return player
+		end
+	end
+	
+	return nil
+	
+end
+
+local function isAdmin(player)
+	for _, v in pairs(admins) do
+		if v == player.Name then
+			return true
+		end
+	end
+	
+	return false
+end
+
+
+commands.tp = function(sender, arguments)
+	
+	print("TP Function fired by "..sender.Name)
+	
+	for i, playerName in pairs(arguments) do
+		print(playerName)
+	end
+	
+	local playerToTeleportName = arguments[1]
+	local playerToTeleportToName = arguments[2]
+	
+	if playerToTeleportName and playerToTeleportToName then
+		local plrToTP = findPlayer(playerToTeleportName)
+		local plrToTPTo = findPlayer(playerToTeleportToName)
+		
+		if plrToTP and plrToTPTo then
+			plrToTP.Character.HumanoidRootPart.CFrame = plrToTPTo.Character.HumanoidRootPart.CFrame
+			print("Successfully Teleported!")
+		end
+	end	
+	
+end
+
+commands.addcash = function(sender, arguments)
+	
+	print("Cash command fired by "..sender.Name)
+	
+	local playerToGiveCashTo = arguments[1]
+	local amount = arguments[2]
+	
+	if playerToGiveCashTo then
+		local plr = findPlayer(playerToGiveCashTo)
+		if plr then
+			plr.leaderstats.Cash.Value = plr.leaderstats.Cash.Value + tonumber(amount)
+			print(playerToGiveCashTo.." was given "..amount.." Cash!")
+		end
+	end
+end
+
+commands.removecash = function(sender, arguments)
+	
+	print("Cash removal command fired by "..sender.Name)
+	
+	local playerToTakeCashFrom = arguments[1]
+	local amount = arguments[2]
+	
+	if playerToTakeCashFrom then
+		local plr = findPlayer(playerToTakeCashFrom)
+		if plr then
+			plr.leaderstats.Cash.Value = plr.leaderstats.Cash.Value - tonumber(amount)
+			print(playerToTakeCashFrom.." had "..amount.." cash removed from them!")
+		end
+	end
+	
+	
+end
+
+commands.setcash = function(sender, arguments)
+	
+	print("Cash setting command fired by "..sender.Name)
+	
+	local playerToSetCash = arguments[1]
+	local setCash = arguments[2]
+	
+	if playerToSetCash then
+		local plr = findPlayer(playerToSetCash)
+		if plr then
+			plr.leaderstats.Cash.Value = tonumber(setCash)
+			print(playerToSetCash.." set their cash to "..setCash)
+		end
+	end
+end
+
+commands.speed = function(sender, arguments)
+	
+	print("Speed command fired by "..sender.Name)
+	
+	local playerToGiveSpeedTo = arguments[1]
+	local amountOfSpeedToGive = arguments[2]
+	
+	if playerToGiveSpeedTo then
+		local plr = findPlayer(playerToGiveSpeedTo)
+		
+		if plr then
+			plr.Character.Humanoid.WalkSpeed = tonumber(amountOfSpeedToGive)
+			print(playerToGiveSpeedTo.." was given Walkspeed "..amountOfSpeedToGive)
+		end
+	end
+	
+end
+
+commands.help = function(sender, arguments)
+	
+	print("Help command fired by "..sender.Name)
+	
+	local playerToHelp = arguments[1]
+	
+	if playerToHelp then
+		local plr = findPlayer(playerToHelp)
+		
+		if plr then
+			plr.PlayerGui.HelpGUI.Frame.Visible = true
+		    game.Workspace.Open.Playing = true
+			print("CMD menu open")
+		end
+	end
+	
+end
+
+commands.kill = function(sender, arguments)
+	
+	print("Kill command fired by "..sender.Name)
+	
+	local playerToKill = arguments[1]
+	
+	if playerToKill then
+		local plr = findPlayer(playerToKill)
+		
+		if plr then
+			plr.Character.Humanoid.Health = 0
+		end
+	end
+end
+
+commands.kick = function(sender, arguments)
+	
+	print("Kick command fired by "..sender.Name)
+	
+	local playertokick = arguments[1]
+	local kickmessage1 = arguments[2] or ""
+	local kickmessage2 = arguments[3] or ""
+	local kickmessage3 = arguments[4] or ""
+	local kickmessage4 = arguments[5] or ""
+	local kickmessage5 = arguments[6] or ""
+	local kickmessage6 = arguments[7] or ""
+	
+	if playertokick then
+		local plr = findPlayer(playertokick)
+		if plr then
+			plr:Kick("You were kicked for "..kickmessage1.." "..kickmessage2.." "..kickmessage3.." "..kickmessage4.." "..kickmessage5.." "..kickmessage6)
+		end
+	end
+	
+end
+
+commands.jumppower = function(sender, arguments)
+	
+	print("Jump command fired by "..sender.Name)
+	
+	local playerToUpdateJump = arguments[1]
+	local jumpStrength = arguments[2]
+	
+	if playerToUpdateJump then
+		local plr = findPlayer(playerToUpdateJump)
+		if plr then
+			plr.Character.Humanoid.JumpPower = tonumber(jumpStrength)
+		end
+	end
+	
+end
+
+commands.ff = function(sender, arguments)
+	
+	print("ForceField command fired by "..sender.Name)
+	
+	local playerToFF = arguments[1]
+	local FFlength = arguments[2] or 999999999999999
+	
+	if playerToFF then
+		local plr = findPlayer(playerToFF)
+		if plr then
+			local force = Instance.new("ForceField")
+			force.Parent = plr.Character
+			wait(tonumber(FFlength))
+			force:Destroy()
+		end
+	end
+	
+end
+
+commands.unff = function(sender, arguments)
+	
+	print("UnForceField command fired by "..sender.Name)
+	
+	local playerTounFF = arguments[1]
+	
+	if playerTounFF then
+		local plr = findPlayer(playerTounFF)
+		if plr then
+			local force = plr.Character.ForceField
+			force:Destroy()
+		end
+	end
+end
+
+commands.announce = function(sender, arguments)
+	
+	print("Announce command fired by "..sender.Name)
+	
+	
+		
+	
+	local playerToAnnouce = arguments[1]
+	local announce1 = arguments[2] or ""
+	local announce2 = arguments[3] or ""
+	local announce3 = arguments[4] or ""
+	local announce4 = arguments[5] or ""
+	local announce5 = arguments[6] or ""
+	local announce6 = arguments[7] or ""
+	local announce7 = arguments[8] or ""
+	local announce8 = arguments[9] or ""
+	local announce9 = arguments[10] or ""
+	local announce10 = arguments[11] or "" 
+	local announce11 = arguments[12] or ""
+	local announce12 = arguments[13] or ""
+	local announce13 = arguments[14] or ""
+	local announce14 = arguments[15] or ""
+	
+	if playerToAnnouce then
+		local plr = findPlayer(playerToAnnouce)
+		if plr then
+			plr.PlayerGui.Announce.Frame.Visible = true
+			plr.PlayerGui.Announce.Frame.TextLabel.Text = (announce1.." "..announce2.." "..announce3.." "..announce4.." "..announce5.." "..announce6.." "..announce7.." "..announce8.." "..announce9.." "..announce10.." "..announce11.." "..announce12.." "..announce13.." "..announce14.." ")
+			wait(4)
+			plr.PlayerGui.Announce.Frame.Visible = false
+		end
+	end
+end
+
+commands.devpanel = function(sender, arguments)
+
+	print("Devpanel open command fired by "..sender.Name)
+
+	local playerToOpen = arguments[1]
+
+	if playerToOpen then
+		local plr = findPlayer(playerToOpen)
+
+		if plr then
+			plr.PlayerGui.AdminPanel.Frame.Visible = true
+		end
+	end
+
+end
+
+commands.undevpanel = function(sender, arguments)
+
+	print("Devpanel close command fired by "..sender.Name)
+
+	local playerToClose = arguments[1]
+
+	if playerToClose then
+		local plr = findPlayer(playerToClose)
+
+		if plr then
+			plr.PlayerGui.AdminPanel.Frame.Visible = false
+		end
+	end
+
+end
+
+commands.warn = function(sender, arguments)
+	
+	print("Warn command fired by "..sender.Name)
+	
+	local playerToBeWarned = arguments[1]
+	local warning1 = arguments[2] or ""
+	local warning2 = arguments[3] or ""
+	local warning3 = arguments[4] or ""
+	local warning4 = arguments[5] or ""
+	local warning5 = arguments[6] or ""
+	local warning6 = arguments[7] or ""
+	local warning7 = arguments[8] or ""
+	local warning8 = arguments[9] or ""
+	local warning9 = arguments[10] or ""
+	local warning10 = arguments[11] or ""
+	local warning11 = arguments[12] or ""
+	local warning12 = arguments[13] or ""
+	
+	if playerToBeWarned then
+		local plr = findPlayer(playerToBeWarned)
+		
+		if plr then
+			plr.PlayerGui.WarnGUI.Frame.Visible = true
+			plr.PlayerGui.WarnGUI.Frame.WarnText.Text = (warning1.." "..warning2.." "..warning3.." "..warning4.." "..warning5.." "..warning6.." "..warning7.." "..warning8.." "..warning9.." "..warning10.." "..warning11.." "..warning12.." ")
+			wait(6)
+			plr.PlayerGui.WarnGUI.Frame.Visible = false
+			plr.PlayerGui.WarnGUI.Frame.WarnText.Text = "This behavior is unacceptable, you will be punished if you continue."
+		end
+	end
+end
+
+commands.loopkill = function(sender, arguments)
+	
+	print("LOOP KILL Command fired by "..sender.Name)
+	
+	
+	local playerToBeLoopKilled = arguments[1]
+	
+	if playerToBeLoopKilled then
+		local plr = findPlayer(playerToBeLoopKilled)
+		if plr then
+			while wait() do
+				
+				plr.Character.Humanoid.Health = 0
+				
+			end
+				
+			
+		end
+	end
+end
+
+commands.fling = function(sender, arguments)
+	
+	print("Fling command fired by "..sender.Name)
+	
+	local playerToBeFlung = arguments[1]
+	local flingSpeed = arguments[2] or 99999999999999
+	
+	if playerToBeFlung then
+		local plr = findPlayer(playerToBeFlung)
+		if plr then
+			local HRP = plr.Character.HumanoidRootPart
+			local Humanoid = plr.Character.Humanoid
+			
+			Humanoid.Sit = true
+			local BodyVelocity = Instance.new("BodyVelocity", HRP)
+			BodyVelocity.Velocity = Vector3.new(6,tonumber(flingSpeed),33)
+			wait(7)
+			BodyVelocity:Destroy()
+			
+		end
+	end
+	
+end
+
+commands.paralyze = function(sender, arguments)
+	
+	print("Paralyze command fired by "..sender.Name)
+	
+	local playerToParalyze = arguments[1]
+	local Time = arguments[2] or 999999999999
+	
+	if playerToParalyze then
+		local plr = findPlayer(playerToParalyze)
+		if plr then
+			local Humanoid = plr.Character.Humanoid
+			
+			Humanoid.PlatformStand = true
+			wait(tonumber(Time))
+			Humanoid.PlatformStand = false
+		end
+	end
+	
+end
+
+commands.unparalyze = function(sender, arguments)
+	
+	print ("UnParalyze command fired by "..sender.Name)
+	
+	local playerToUnParalyze = arguments[1]
+	
+	if playerToUnParalyze then
+		local plr = findPlayer(playerToUnParalyze)
+		if plr then
+			local Humanoid = plr.Character.Humanoid
+			Humanoid.PlatformStand = false
+		end
+		
+	end
+	
+end
+
+commands.addcases = function(sender, arguments)
+	
+	print ("AddCases command fired by "..sender.Name)
+	
+	local playerToGiveCases = arguments[1]
+	local amount = arguments[2]
+	
+	if playerToGiveCases then
+		local plr = findPlayer(playerToGiveCases)
+		if plr then
+			plr:WaitForChild("leaderstats"):WaitForChild("Cases Opened").Value = plr:WaitForChild("leaderstats"):WaitForChild("Cases Opened") + amount
+		end
+	end
+	
+end
+
+commands.removecases = function(sender, arguments)
+	
+	print ("RemoveCases command fired by "..sender.Name)
+	
+	local playerToRemoveCases = arguments[1]
+	local amount = arguments[2]
+	
+	if playerToRemoveCases then
+		local plr = findPlayer(playerToRemoveCases)
+		if plr then
+			plr:WaitForChild("leaderstats"):WaitForChild("Cases Opened").Value = plr:WaitForChild("leaderstats"):WaitForChild("Cases Opened").Value - amount
+		end
+	end
+	
+end
+
+commands.setcases = function(sender, arguments)
+	
+	print("SetCases command fired by "..sender.Name)
+	
+	local playerToSetCases = arguments[1]
+	local amount = arguments[2]
+	
+	if playerToSetCases then
+		local plr = findPlayer(playerToSetCases)
+		if plr then
+			plr:WaitForChild("leaderstats"):WaitForChild("Cases Opened").Value = amount
+		end
+	end
+	
+end
+
+commands.giveknife = function(sender, arguments)
+	
+	print("GiveKnife command fired by "..sender.Name)
+	
+	local playerToGiveKnife = arguments[1]
+	
+	if playerToGiveKnife then
+		local plr = findPlayer(playerToGiveKnife)
+		if plr then
+			local knife = math.random(1,3)
+			
+			if knife == 1 then
+				plr.PlayerGui:WaitForChild("ItemGUI").ExtraordinaryBG.Visible = true
+				plr.PlayerGui:WaitForChild("ItemGUI").ExtraordinaryBG.BSS.Visible = true
+				print("Gave "..arguments[1].." A Butterfly Knife Spectral!")
+			end
+			if knife == 2 then
+				plr.PlayerGui:WaitForChild("ItemGUI").ExtraordinaryBG.Visible = true
+				plr.PlayerGui:WaitForChild("ItemGUI").ExtraordinaryBG.KKP.Visible = true
+				print("Gave "..arguments[1].." A Karambit Knights Pledge!")
+			end
+			if knife == 3 then
+				plr.PlayerGui:WaitForChild("ItemGUI").ExtraordinaryBG.Visible = true
+				plr.PlayerGui:WaitForChild("ItemGUI").ExtraordinaryBG.SOB.Visible = true
+				print("Gave "..arguments[1].." Skeleton Knife Orcs Blood!")
+			end
+		end
+	end
+	
+end
+
+
+game.Players.PlayerAdded:Connect(function(player)
+	player.Chatted:Connect(function(message, recipient)
+		if isAdmin(player) then
+		
+		message = string.lower(message)
+		
+		local splitString = message:split(" ")
+		
+		local Command = splitString[1]
+		
+		local cmd = Command:split(prefix)
+		
+		local cmdName = cmd[2]
+		
+		if commands[cmdName] then
+			
+			local arguments = {}
+			
+			for i = 2, #splitString, 1 do
+				table.insert(arguments,splitString[i])
+			end
+			
+			commands[cmdName](player,arguments)
+			
+		end
+		end
+	end)
+end)
